@@ -1,0 +1,12 @@
+/home/mel/Documents/csharp/QuickTools-dotnet6/bin/Debug/net6.0/QuickTools-dotnet6.deps.json
+/home/mel/Documents/csharp/QuickTools-dotnet6/bin/Debug/net6.0/QuickTools-dotnet6.dll
+/home/mel/Documents/csharp/QuickTools-dotnet6/bin/Debug/net6.0/QuickTools-dotnet6.pdb
+/home/mel/Documents/csharp/QuickTools-dotnet6/obj/Debug/net6.0/QuickTools-dotnet6.csproj.AssemblyReference.cache
+/home/mel/Documents/csharp/QuickTools-dotnet6/obj/Debug/net6.0/QuickTools-dotnet6.GeneratedMSBuildEditorConfig.editorconfig
+/home/mel/Documents/csharp/QuickTools-dotnet6/obj/Debug/net6.0/QuickTools-dotnet6.AssemblyInfoInputs.cache
+/home/mel/Documents/csharp/QuickTools-dotnet6/obj/Debug/net6.0/QuickTools-dotnet6.AssemblyInfo.cs
+/home/mel/Documents/csharp/QuickTools-dotnet6/obj/Debug/net6.0/QuickTools-dotnet6.csproj.CoreCompileInputs.cache
+/home/mel/Documents/csharp/QuickTools-dotnet6/obj/Debug/net6.0/QuickTools-dotnet6.dll
+/home/mel/Documents/csharp/QuickTools-dotnet6/obj/Debug/net6.0/refint/QuickTools-dotnet6.dll
+/home/mel/Documents/csharp/QuickTools-dotnet6/obj/Debug/net6.0/QuickTools-dotnet6.pdb
+/home/mel/Documents/csharp/QuickTools-dotnet6/obj/Debug/net6.0/ref/QuickTools-dotnet6.dll

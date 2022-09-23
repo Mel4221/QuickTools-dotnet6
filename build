@@ -1,0 +1,16 @@
+#!/bin/bash
+
+
+
+
+CSFILE=../QuickTools/
+
+cp $(find $CSFILE*.cs) .
+
+dotnet build
+
+
+
+
+
+
