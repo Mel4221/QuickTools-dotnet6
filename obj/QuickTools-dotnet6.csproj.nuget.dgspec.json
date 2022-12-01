@@ -10,11 +10,11 @@
         "projectUniqueName": "/home/mel/Documents/csharp/QuickTools-dotnet6/QuickTools-dotnet6.csproj",
         "projectName": "QuickTools-dotnet6",
         "projectPath": "/home/mel/Documents/csharp/QuickTools-dotnet6/QuickTools-dotnet6.csproj",
-        "packagesPath": "/home/mel/.nuget/packages/",
+        "packagesPath": "/root/.nuget/packages/",
         "outputPath": "/home/mel/Documents/csharp/QuickTools-dotnet6/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/mel/.nuget/NuGet/NuGet.Config"
+          "/root/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"

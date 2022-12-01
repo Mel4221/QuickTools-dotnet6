@@ -1,13 +1,14 @@
 #!/bin/bash
 
 
-
-
+rm *.cs 
+echo "Current Deleted"
+sleep 3
 CSFILE=../QuickTools/
 
 cp $(find $CSFILE*.cs) .
 
-dotnet build
+sudo dotnet build
 
 
 

@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using QuickTools.Colors; 
 using System.Collections.Generic; 
 namespace QuickTools
 {
@@ -34,6 +35,8 @@ namespace QuickTools
       /// </summary>
       public class Print
       {
+
+
             /// <summary>
             /// List the entire file array 
             /// </summary>
@@ -42,7 +45,7 @@ namespace QuickTools
             {
                   for(int item = 0; item<array.Length; item++)
                   {
-                        Color.Green(array[item]); 
+                        Color.Green($"{item+1}. "+array[item]); 
                   }
             }
 
@@ -65,7 +68,7 @@ namespace QuickTools
             {
                   for (int item = 0; item < array.Length; item++)
                   {
-                        Color.Green(array[item]);
+                        Color.Green($"{item+1}. "+array[item]);
                   }
             }
             /// <summary>
@@ -73,6 +76,18 @@ namespace QuickTools
             /// </summary>
             /// <param name="array">Array.</param>
             public static void List(string[] array)
+            {
+                  for (int item = 0; item < array.Length; item++)
+                  {
+                        Color.Green($"{item+1}. "+array[item]);
+                  }
+            }
+            /// <summary>
+            /// List the specified array and noIndexer.
+            /// </summary>
+            /// <param name="array">Array.</param>
+            /// <param name="noIndexer">If set to <c>true</c> no indexer.</param>
+            public static void List(string[] array,bool noIndexer)
             {
                   for (int item = 0; item < array.Length; item++)
                   {
@@ -88,7 +103,7 @@ namespace QuickTools
                  
                   for (int item = 0; item < array.Length; item++)
                   {
-                        Color.Green(array[item]);
+                        Color.Green($"{item+1}. "+array[item]);
                   }
             }
             /// <summary>
@@ -99,7 +114,7 @@ namespace QuickTools
             {
                   for (int item = 0; item < array.Length; item++)
                   {
-                        Color.Green(array[item]);
+                        Color.Green($"{item+1}. "+array[item]);
                   }
             }
 
@@ -111,7 +126,7 @@ namespace QuickTools
             {
                   for (int item = 0; item < array.Length; item++)
                   {
-                        Color.Green(array[item]);
+                        Color.Green($"{item+1}. "+array[item]);
                   }
             }
       }

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This Contains all the shortcuts for the Alerts
 and events of colors for the display of the 
 text. 
@@ -13,11 +13,11 @@ using System.Threading;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using QuickTools.Colors;
 //using System.Security.Permissions;// it has to be implemented
 
 namespace QuickTools
 {
-
 
 
 
@@ -42,8 +42,14 @@ namespace QuickTools
                    Console.BufferWidth                 
                   */
 
-
-
+                  /// <summary>
+                  /// Returns a line divition using the Enviroment.NewLine command. 
+                  /// </summary>
+                  /// <returns>The corresponding line for the console</returns>
+                  static string Line()
+            {
+                  return Environment.NewLine;
+            }
 
 
             /// <summary>
@@ -107,6 +113,16 @@ namespace QuickTools
                         }
                   }
             }
+            
+            
+             /// <summary>
+            /// This method Returns the current path from the application
+            /// </summary>
+            /// <returns>Returns the current path</returns>
+            public static string CurrentPath()
+            {
+                return Path; 
+            }
 
             /// <summary>
             /// Abstraction for Directory.GetCurrentDirectory(); 
@@ -138,7 +154,7 @@ namespace QuickTools
 
             }
 
-                  private static string path = Get.Path;
+               //   private static string path = Get.Path;
                   private static string qtDir = "data/qt/";
                   private static string keyFile = "data/qt/secure.key";
 
@@ -529,7 +545,79 @@ namespace QuickTools
                   return inputValue;
             }
 
+            /// <summary>
+            /// Get the Input as an array the array.
+            /// </summary>
+            /// <returns>The array.</returns>
+            public static string[] InputArray()
+            {
 
+
+                  string[] input = Get.TextInput().Split(' ');
+
+                  //Print.List(input);
+
+                  Func<String[], String[]> F = (arr) => {
+                        String[] clearArr;
+                        List<string> list = new List<string>();
+                        for (int i = 0; i < arr.Length; i++)
+                        {
+                              if (arr[i] != "" && arr[i] != null)
+                              {
+                                    list.Add(arr[i]);
+                              }
+                        }
+
+                        clearArr = new string[list.Count];
+                        for (int val = 0; val < list.Count; val++)
+                        {
+                              clearArr[val] = list[val];
+                        }
+
+                        return clearArr;
+
+                  };
+
+                  return F(input); 
+                 //For testing Print.List(F(input));
+            }
+            /// <summary>
+            /// Get the Input as an array the array.
+            /// </summary>
+            /// <returns>The array.</returns>
+            /// <param name="label">Label.</param>
+            public static string[] InputArray(object label)
+            {
+
+
+                  string[] inputValue = Get.TextInput(label.ToString()).Split(' ');
+
+                 // Print.List(input);
+
+                  Func<String[], String[]> F = (arr) => {
+                        String[] clearArr;
+                        List<string> list = new List<string>();
+                        for (int i = 0; i < arr.Length; i++)
+                        {
+                              if (arr[i] != "" && arr[i] != null)
+                              {
+                                    list.Add(arr[i]);
+                              }
+                        }
+
+                        clearArr = new string[list.Count];
+                        for (int val = 0; val < list.Count; val++)
+                        {
+                              clearArr[val] = list[val];
+                        }
+
+                        return clearArr;
+
+                  };
+
+                  return F(inputValue);
+                  //For testing Print.List(F(input));
+            }
 
 
 
@@ -588,7 +676,7 @@ namespace QuickTools
                   Get.Write("");
                   Get.LabelSide(display);
                   Get.Reset();                  
-                  //Console.Write(" ");
+                  Console.Write(" ");
                   bool isnumber;
 
                   string inputValue = Console.ReadLine();
@@ -658,12 +746,36 @@ namespace QuickTools
                   }
                   else
                   {
-                        Yellow("Incorrect imput ,  ONLY numbers expected , and not maximum to "+int.MaxValue+" nor smallert to "+int.MinValue);                       
-                        throw new InvalidDataException(); 
-                        //return 0;
+                        Yellow("Incorrect imput ,  ONLY numbers expected , and not maximum to "+int.MaxValue+" nor smallert than "+int.MinValue);                       
+                        //throw new Inva\lidDataException(); 
+                        return int.MinValue;
                   }
 
             }
+
+
+
+             /// <summary>
+             /// Get a number in put and returns a double 
+             /// </summary>
+             /// <returns>The input.</returns>
+             /// <param name="BigNumber">If set to <c>true</c> big number.</param>
+            public static double NumberInput(bool BigNumber)
+            {
+
+                  Get.LabelSide(">");
+                  Console.Write(" ");
+                 //bool isnumber = false;
+#pragma warning disable RECS0117 // Local variable has the same name as a member and hides it
+                  string input = Console.ReadLine();
+#pragma warning restore RECS0117 // Local variable has the same name as a member and hides it
+                  double number = Convert.ToDouble(input);
+
+                  return number; 
+                       // Yellow("Incorrect imput"); 
+
+            }
+
             /// <summary>
             /// TextInput Method ReadText from the Console and return text
             /// has magenta color design and also it send the current text
@@ -1012,7 +1124,7 @@ namespace QuickTools
                               Color.Cyan("OK");
                               break;
                         default:
-                              var get = new Get();                              
+                             // var get = new Get();                              
                               Alert("Not Implemented a number for this method please only from 0 to 4 \n" +
                               "Colors Availables are {Green , Yellow , Blue , Red , Cyan }");
                               break;                             
