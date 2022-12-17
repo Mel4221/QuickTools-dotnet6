@@ -102,7 +102,7 @@ namespace QuickTools
             /// <returns>The password.</returns>
       public static string Password ()
       {                        // this one will generate a minimum passowrd of 9 digits 
-      string password = "";
+                  StringBuilder password = new StringBuilder(); 
       Random lower, upper, symbol, number;
 
       lower = new Random ();
@@ -118,27 +118,26 @@ namespace QuickTools
           switch (order)
             {
             case 0:
-            password += LowerCase[lower.Next (0, LowerCase.Length)];
-
+                  password.Append( LowerCase[lower.Next (0, LowerCase.Length)]);
             break;
             case 1:
-            password += UpperCase[upper.Next (0, UpperCase.Length)];
+                  password.Append(UpperCase[upper.Next (0, UpperCase.Length)]);
             break;
             case 2:
-            password += Symbols[symbol.Next (0, Symbols.Length)];
+                  password.Append(Symbols[symbol.Next (0, Symbols.Length)]);
             break;
             case 3:
-            password += Numbers[number.Next (0, Numbers.Length)];
+                  password.Append(Numbers[number.Next (0, Numbers.Length)]);
             break;
             default:
-            password += Numbers[number.Next (0, Numbers.Length)];
+                  password.Append(Numbers[number.Next (0, Numbers.Length)]);
             break;
 
             }
         }
-      Generated = password.Replace (" ", "");
-      return password.Replace (" ", "");
-      }
+                  Generated = password.ToString().Replace(" ", "");
+                  return password.ToString().Replace(" ", "");
+            }
 
 
 
@@ -197,21 +196,25 @@ namespace QuickTools
       return password.Replace (" ", "");
       }
 
+
+
+            public static double RandomTextCounter = 0; 
             /// <summary>
             /// Generat Randoms text completly chunked together useful to create random passwords or anything that requires a long string of text.
             /// </summary>
             /// <returns>The text.</returns>
             /// <param name="textLength">Text length.</param>
-            public static string RandomText(int textLength)
+            public static string RandomText(double textLength)
             {                       // this one will generate a minimum passowrd of 9 digits 
 
-                  int passwordLenght = textLength; 
+                  RandomTextCounter = 0; 
+                  double passwordLenght = textLength; 
                   if (textLength <= 0)
                   {
                         textLength = 4; 
                   }
 
-                  string password = "";
+                  StringBuilder password = new StringBuilder(); 
                   Random lower, upper, number;
 
                   lower = new Random();
@@ -228,29 +231,87 @@ namespace QuickTools
                         switch (order)
                         {
                               case 0:
-                                    password += LowerCase[lower.Next(0, 26)];
+                                    password.Append(LowerCase[lower.Next(0, 26)]);
 
                                     break;
                               case 1:
-                                    password += UpperCase[upper.Next(0, 26)];
+                                    password.Append(UpperCase[upper.Next(0, 26)]);
                                     break;
                               case 2:
                                     // password += Symbols[symbol.Next (0, 14)];
                                     break;
                               case 3:
-                                    password += Numbers[number.Next(0, 10)];
+                                    password.Append(Numbers[number.Next(0, 10)]);
                                     break;
                               default:
-                                    password += Numbers[number.Next(0, 10)];
+                                    password.Append(Numbers[number.Next(0, 10)]);
                                     break;
 
                         }
+
+                        RandomTextCounter++;
+
+                        //double porcentage = (RandomTextCounter / textLength) * 1000;
+                        //Console.Title = $"Processing: {porcentage}%";
                   }
-                  Generated = password.Replace(" ", "");
-                  return password.Replace(" ", "");
+                  Generated = password.Replace(" ", "").ToString();
+                  return password.Replace(" ", "").ToString();
             }
 
 
+            public static string RandomText(double textLength,Action callBack)
+            {                       // this one will generate a minimum passowrd of 9 digits 
+
+                  RandomTextCounter = 0;
+                  double passwordLenght = textLength;
+                  if (textLength <= 0)
+                  {
+                        textLength = 4;
+                  }
+
+                  StringBuilder password = new StringBuilder();
+                  Random lower, upper, number;
+
+                  lower = new Random();
+                  upper = new Random();
+                  //symbol = new Random ();
+                  number = new Random();
+
+                  // this will change the order of the password
+
+                  for (int PassWordLengh = 0; PassWordLengh < passwordLenght; PassWordLengh++)
+                  {
+                        int order = ranOrder.Next(0, 4);
+
+                        switch (order)
+                        {
+                              case 0:
+                                    password.Append(LowerCase[lower.Next(0, 26)]);
+
+                                    break;
+                              case 1:
+                                    password.Append(UpperCase[upper.Next(0, 26)]);
+                                    break;
+                              case 2:
+                                    // password += Symbols[symbol.Next (0, 14)];
+                                    break;
+                              case 3:
+                                    password.Append(Numbers[number.Next(0, 10)]);
+                                    break;
+                              default:
+                                    password.Append(Numbers[number.Next(0, 10)]);
+                                    break;
+
+                        }
+
+                        RandomTextCounter++;
+                        callBack();
+                        //double porcentage = (RandomTextCounter / textLength) * 1000;
+                        //Console.Title = $"Processing: {porcentage}%";
+                  }
+                  Generated = password.Replace(" ", "").ToString();
+                  return password.Replace(" ", "").ToString();
+            }
 
 
             /// <summary>

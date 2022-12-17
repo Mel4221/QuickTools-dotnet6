@@ -87,6 +87,21 @@ namespace QuickTools
                   /// Options List container 
                   /// </summary>
             private static List<string> OptionList = new List<string>();
+            /// <summary>
+            /// This provide the access to the OptionList count for verification porpuses 
+            /// </summary>
+            public int Count = 0;
+
+            /// <summary>
+            /// Gets the triguer.
+            /// </summary>
+            /// <value>The triguer.</value>
+            public static string Triguer { get; set;  }
+            /// <summary>
+            /// Gets a value indicating whether this <see cref="T:QuickTools.Options"/> is triguered.
+            /// </summary>
+            /// <value><c>true</c> if triguered; otherwise, <c>false</c>.</value>
+            public static bool Triguered { get; set; }
 
             /// <summary>
             /// Clears All the options.
@@ -296,6 +311,12 @@ namespace QuickTools
 #pragma warning disable CS0162 // Unreachable code detected
                                           break;
 #pragma warning restore CS0162 // Unreachable code detected
+                                    case "Escape":
+                                    case "Backspace":
+                                          Options.Triguer = Get.Key;
+                                          Options.Triguered = true; 
+
+                                          break; 
                                     default:
                                           /*
                                           // in here it has to be added a switch that could 
@@ -357,8 +378,8 @@ namespace QuickTools
             /// <param name="options">Options.</param>
             public Options(string[] options)
             {
-
-                  ClearOptions(); 
+                  ClearOptions();
+                  Count = options.Length;
                   Color.Yellow(Label);
                   foreach (string option in options)
                   {
@@ -387,7 +408,7 @@ namespace QuickTools
             public Options(string[] options,bool Simple)
             {
 
-                ClearOptions(); 
+                ClearOptions();
 
                   if (Simple == true)
                   {
@@ -428,8 +449,11 @@ namespace QuickTools
             /// <param name="options">Options.</param>
             public Options(List<object> options)
             {
-            ClearOptions();
-            Color.Yellow(Label);
+
+                  ClearOptions();
+                  Color.Yellow(Label);
+                  Count = options.Count;
+
                   foreach (string option in options)
                   {
                         OptionList.Add(option);
@@ -461,6 +485,7 @@ namespace QuickTools
             {
 
             ClearOptions();
+
             if (type == false)
                   {
                         string[] option = { "No", "Yes" };

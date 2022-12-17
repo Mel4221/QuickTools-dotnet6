@@ -14,13 +14,14 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using QuickTools.Colors;
+using System.Diagnostics;
 //using System.Security.Permissions;// it has to be implemented
 
 namespace QuickTools
 {
 
 
-
+ 
       ///////////////////////////////////////////////////////////
       ///////////////////////////////////////////////////////////
       /////////////////*this is were the Class Get Starts *//////
@@ -37,16 +38,38 @@ namespace QuickTools
 
 
 
-                  /*
-                   Console.BufferHeight
-                   Console.BufferWidth                 
-                  */
+      
 
-                  /// <summary>
-                  /// Returns a line divition using the Enviroment.NewLine command. 
-                  /// </summary>
-                  /// <returns>The corresponding line for the console</returns>
-                  static string Line()
+
+            /// <summary>
+            /// Get the porcenrage status of the provided current time and goal 
+            /// </summary>
+            /// <returns>The status.</returns>
+            /// <param name="current">Current.</param>
+            /// <param name="goal">Goal.</param>
+            public static string Status(object current, object goal)
+            {
+                  string status = null;
+
+                  double c = Convert.ToDouble(current);
+                  double g = Convert.ToDouble(goal);
+
+                  double s = Math.Round(c / g, 2) * 100;
+
+
+                  status = $"{s}%";
+                  return status;
+            }
+            /*
+             Console.BufferHeight
+             Console.BufferWidth                 
+            */
+
+            /// <summary>
+            /// Returns a line divition using the Enviroment.NewLine command. 
+            /// </summary>
+            /// <returns>The corresponding line for the console</returns>
+            static string Line()
             {
                   return Environment.NewLine;
             }
@@ -154,8 +177,31 @@ namespace QuickTools
 
             }
 
-               //   private static string path = Get.Path;
-                  private static string qtDir = "data/qt/";
+            /// <summary>
+            /// Create a data path if is not created and creates the directory given as a parameter
+            /// </summary>
+            /// <returns></returns>
+            /// <param name="newDirectory"></param>
+            public static string DataPath(string newDirectory)
+            {
+
+
+                  string folder = Get.Path + "data/qt/" + newDirectory; 
+                  if (Directory.Exists(folder) == true)
+                  {
+                        return folder;
+                  }
+                  else
+                  {
+                        Directory.CreateDirectory(folder);
+
+                        return folder;
+                  }
+
+            }
+
+            //   private static string path = Get.Path;
+            private static string qtDir = "data/qt/";
                   private static string keyFile = "data/qt/secure.key";
 
             /// <summary>
@@ -581,6 +627,42 @@ namespace QuickTools
                   return F(input); 
                  //For testing Print.List(F(input));
             }
+
+
+
+
+            /// <summary>
+            /// Parses the text to a string array.
+            /// </summary>
+            /// <returns>The text to array.</returns>
+            /// <param name="words">Words.</param>
+            public static string[] ParseTextToArray(string words)
+            {
+                  string[] wordsArray = words.Split(' ');
+                                   
+                  Func<String[], String[]> F = (arr) => {
+                        String[] clearArr;
+                        List<string> list = new List<string>();
+                        for (int i = 0; i < arr.Length; i++)
+                        {
+                              if (arr[i] != "" && arr[i] != null)
+                              {
+                                    list.Add(arr[i]);
+                              }
+                        }
+
+                        clearArr = new string[list.Count];
+                        for (int val = 0; val < list.Count; val++)
+                        {
+                              clearArr[val] = list[val];
+                        }
+
+                        return clearArr;
+
+                  };
+
+                  return F(wordsArray); 
+            }
             /// <summary>
             /// Get the Input as an array the array.
             /// </summary>
@@ -627,18 +709,37 @@ namespace QuickTools
             /// it will save the char if is changed
             /// </summary>
             public static string InputChar = ">";
-            ///<summary>
-            /// This Method Get the input from the keyboard
-            /// and it returns an object and is an implementation of
-            /// Console.ReadLine();
-            /// Get.LabelSide()
-            /// int.TryParse();
-            /// all together 
-            /// </summary>           
-            /// <returns> Object input either number or text </returns>
-            public static object Input()
+
+
+
+
+              
+              /// <summary>
+              /// Input type.
+              /// </summary>
+             public class InputType
             {
-                                   
+                   /// <summary>
+                   /// Gets or sets the text.
+                   /// </summary>
+                   /// <value>The text.</value>
+                  public string Text { get; set;}
+                  /// <summary>
+                  /// Gets or sets the number.
+                  /// </summary>
+                  /// <value>The number.</value>
+                  public int Number { get; set; }                        
+            }
+
+
+            /// <summary>
+            /// This Method Get the input from the keyboard
+            /// and it returns an object and is an implementation 
+            /// </summary>
+            /// <returns>The input.</returns>
+            public static InputType Input()
+            {
+
                   Get.LabelSide(InputChar);
                   Get.Reset();                 
                   Console.Write(" ");
@@ -652,47 +753,67 @@ namespace QuickTools
                   {
                         Number = number;
                         Get.input = number;
-                        return number;
+
+                        return new InputType()
+                        {
+                              Number = number,
+                              Text = number.ToString()                             
+                        }; 
                   }
                   else
                   {
                         Get.input = inputValue;
                         Get.Text = inputValue;
-                        return inputValue;
+                        return new InputType()
+                        {
+                              Text = inputValue
+                        };
                   }
             }
 
 
-     
-            ///<summary>
+
+
+
+            /// <summary>
             /// This Method does the same as Input() without any 
             /// arguments but with the only diference that the char
             /// on the side at the bigging could be edited 
-            /// like Get.Input("Write Your Name");
+            /// like Get.Input("Write Your Name");.
             /// </summary>
-            /// <returns> object Input either text or number</returns>
-            public static object Input(string display)
+            /// <returns>The input.</returns>
+            /// <param name="display">Display.</param>
+            public static InputType Input(string display)
             {
                   Get.Write("");
                   Get.LabelSide(display);
                   Get.Reset();                  
                   Console.Write(" ");
                   bool isnumber;
-
                   string inputValue = Console.ReadLine();
                   int number;
+
                   isnumber = int.TryParse(inputValue, out number);
+
                   if (isnumber)
                   {
                         Number = number;
                         Get.input = number;
-                        return number;
+
+                        return new InputType()
+                        {
+                              Number = number,
+                              Text = number.ToString()
+                        };
                   }
                   else
                   {
                         Get.input = inputValue;
                         Get.Text = inputValue;
-                        return inputValue;
+                        return new InputType()
+                        {
+                              Text = inputValue
+                        };
                   }
             }
                        /// <summary>
@@ -803,11 +924,11 @@ namespace QuickTools
             /// <param name="textToDisplayOnTop">textToDisplayOnTop.</param>
             public static string TextInput(string textToDisplayOnTop)
             {
-                  Get.LabelSide(textToDisplayOnTop);
+                  //Get.LabelSide(textToDisplayOnTop);
                   //Console.WriteLine("");
                   Get.Reset();
                   Console.Write(" ");
-                  Get.LabelSide(">");
+                  Get.LabelSide(textToDisplayOnTop);
                   Console.Write(" ");
 
                   string text = Console.ReadLine();
@@ -1098,7 +1219,7 @@ namespace QuickTools
             /// <summary>
             /// This is just used when you need to see if some logic is working as spected
             /// so each ok number provide a different color and each of them are from 0 to 4 
-            /// and the colors available are (Green, Yellow , Blue ,  Red , Cyan )
+            /// and the colors available are (Green 0, Yellow 1, Blue 2,  Red 3, Cyan 4)
             /// </summary>
             /// <param name="colorNumber">Color number.</param>
             public static void Ok(int colorNumber)
