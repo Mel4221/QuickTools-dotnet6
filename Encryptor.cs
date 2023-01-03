@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Text; 
 using System.IO;
 using System.Security.Cryptography;
@@ -12,7 +12,7 @@ namespace QuickTools
             /// The secure class is a class that uses the Aes tecnology to encrypt data by using
             /// a public key and a 
             /// </summary>
-        public partial class Secure
+        public partial class Secure:IDisposable
         {
 
 
@@ -23,6 +23,12 @@ namespace QuickTools
             /// This allow the encriptor to either try to save the scure key or not  and is set to FALSE <see langword="false"/>  by default for security reasons
             /// </summary>
             public bool AllowToSaveKey = false; 
+
+            /// <summary>
+            /// Gets or sets a value indicating whether this <see cref="T:QuickTools.Secure"/> use saved key.
+            /// </summary>
+            /// <value><c>true</c> if use saved key; otherwise, <c>false</c>.</value>
+            public bool UseSavedKey { get; set; }
 
 
 
@@ -36,12 +42,18 @@ namespace QuickTools
             /// </summary>
             public string RowPublicKey = null; 
 
-            public byte[] CreatePassword(string password)
+
+            /// <summary>
+            /// Creates the password Based on the given input to be able to be addes as a key for the Encription or decription
+            /// </summary>
+            /// <returns>The password.</returns>
+            /// <param name="password">Password.</param>
+            public byte[] CreatePassword(object password)
             {
                   byte[] passByes  = null;
 
-                  byte[] array = Encoding.ASCII.GetBytes(password);
-                  if (array.Length <16)
+                  byte[] array = Encoding.ASCII.GetBytes(password.ToString());
+                  if (array.Length < 16)
                   {
 
                         passByes = new byte[16];
@@ -54,7 +66,7 @@ namespace QuickTools
                   else
                   {
                         passByes = new byte[16];
-                        byte[] bigerArray = Encoding.ASCII.GetBytes(password);
+                        byte[] bigerArray = Encoding.ASCII.GetBytes(password.ToString());
 
                         for (int value=0; value < passByes.Length; value++)
                         {
@@ -70,6 +82,55 @@ namespace QuickTools
             }
 
 
+            public byte[] Encrypt(byte[] bytes , byte[] password , byte[] IV)
+            {
+                  if(bytes.Length == 0 || password.Length == 0 || IV.Length == 0)
+                  {
+                        throw new ArgumentException("Pleas Check any of your arguments given due to the length is incorrect");
+                  }
+
+                  byte[] encrypted;
+                  char[] chars = IConvert.ToCharArray(bytes); 
+
+                  // Create an Aes object
+                  // with the specified key and IV.
+                  using (Aes aes = Aes.Create())
+                  {
+
+
+
+                        aes.Key = password;
+                        aes.IV = IV;
+
+
+                        // Create an encryptor to perform the stream transform.
+                        ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+
+                        // Create the streams used for encryption.
+                        using (MemoryStream msEncrypt = new MemoryStream())
+                        {
+                              using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                              {
+                                    using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
+                                    {
+                                          //Write all data to the stream.
+
+                                          swEncrypt.Write(chars,0,chars.Length);
+                                    }
+                                    encrypted = msEncrypt.ToArray();
+                              }
+                        }
+                  }
+
+                  // Return the encrypted bytes from the memory stream.
+                  //string text = Encoding.ASCII.GetString(encrypted);
+                  return encrypted;
+                  // }catch(Exception)
+                  // {
+                  //    return null; 
+                  //}
+            }
+
 
 
 
@@ -84,10 +145,10 @@ namespace QuickTools
             public byte[] Encrypt(string plainText, object password)
             {
                  // try {
-
-                        byte[] Key = CreatePassword(password.ToString());
-                        byte[] IV = New.RandomByteKey(AllowToSaveKey);
-                        this.PublicKey = IV;
+                  
+                  byte[] Key = CreatePassword(password.ToString());
+                  byte[] IV = UseSavedKey == false ? New.RandomByteKey(AllowToSaveKey) : Get.KeyBytesSaved(); 
+                  this.PublicKey = IV;
                         
                         //Get.Wait($"Text: {plainText.Length} Key: {Key.Length} IV: {IV.Length}");
                         /*
@@ -151,6 +212,19 @@ namespace QuickTools
 
 
 
+            /// <summary>
+            /// Encrypts the text.
+            /// </summary>
+            /// <returns>The text.</returns>
+            /// <param name="text">Text.</param>
+            /// <param name="password">Password.</param>
+            public string EncryptText(string text , object password)
+            {
+                  this.AllowToSaveKey = true; 
+                  byte[] data = this.Encrypt(text, password);
+
+                 return IConvert.BytesToString(data); 
+            }
 
 
 
@@ -262,7 +336,42 @@ namespace QuickTools
                   this.ManualIV = iv;
                   this.ClearText = clearText.ToString(); 
             }
-           
+
+            #region IDisposable Support
+            private bool disposedValue = false; // To detect redundant calls
+
+            protected virtual void Dispose(bool disposing)
+            {
+                  if (!disposedValue)
+                  {
+                        if (disposing)
+                        {
+                              // TODO: dispose managed state (managed objects).
+                        }
+
+                        // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                        // TODO: set large fields to null.
+
+                        disposedValue = true;
+                  }
+            }
+
+            // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+            // ~Secure() {
+            //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            //   Dispose(false);
+            // }
+
+            // This code added to correctly implement the disposable pattern.
+            public void Dispose()
+            {
+                  // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+                  Dispose(true);
+                  // TODO: uncomment the following line if the finalizer is overridden above.
+                  // GC.SuppressFinalize(this);
+            }
+            #endregion
+
 
       }
 }

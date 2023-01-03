@@ -201,8 +201,8 @@ namespace QuickTools
             }
 
             //   private static string path = Get.Path;
-            private static string qtDir = "data/qt/";
-                  private static string keyFile = "data/qt/secure.key";
+            private static string qtDir = "data/qt/keys/";
+                  private static string keyFile = qtDir+"secure.key";
 
             /// <summary>
             /// This method can used manually
@@ -413,7 +413,7 @@ namespace QuickTools
                   Get.Reset();
                   if (name == "" || password == "")
                   {
-                        Get.WrongIn("Name or password empty");
+                       Console.WriterongIn("Name or password empty");
                         Get.Clear();
                         Login();
                   }
@@ -465,7 +465,7 @@ namespace QuickTools
                         SingUp();                        
                   }
 
-                  //  Get.Wait(name+" "+lastName + " " +password + " " +dob + " " +phone + " " +email);
+                  // Console.Write(name+" "+lastName + " " +password + " " +dob + " " +phone + " " +email);
                   string[] userData = { name, lastName, password, dob, phone, email };
                   return userData;
             }
@@ -502,12 +502,25 @@ namespace QuickTools
             /// method 
             ///</summary>           
             public static string Key = "";
+
             /// <summary>
-            /// This method gets the key pressed and it returns it 
-            /// on the same way it gets it , it also send it to the Key field
+            /// Gets or sets the char.
             /// </summary>
-            /// <returns>object key pressed</returns>
-            public static object KeyInput()
+            /// <value>The char.</value>
+            public static string Char { get; set; }
+
+            /// <summary>
+            /// Gets or sets the modifier.
+            /// </summary>
+            /// <value>The modifier.</value>
+            public static string Modifier { get; set; }
+        
+
+            /// <summary>
+            /// Keies the input.
+            /// </summary>
+            /// <returns>The input.</returns>
+            public static string KeyInput()
             {
                   //	Get.LabelSide(">"); // just looks better damme it 
                   //	Console.Write(" ");
@@ -520,76 +533,12 @@ namespace QuickTools
                   // with the information from it like 1D1
                   string inputValue = InputKey.Key.ToString();
                   Key = inputValue;
+                  Char = InputKey.KeyChar.ToString();
+                  Modifier = InputKey.Modifiers.ToString(); 
                   return inputValue;
             }
 
-            /// <summary>
-            /// This method allows you to get the Character value 
-            /// and return it as anstring 
-            /// </summary>
-            /// <returns>The char.</returns>
-                  public static string KeyChar()
-            {
-                  //    Get.LabelSide(">"); // just looks better damme it 
-                  //    Console.Write(" ");
-                  // it just did not make as much sence on 
-                  //why would i want something that is pointing to 
-                  // nothing because is just wating for a key to be pressed
-                  var InputKey = Console.ReadKey();
-                  //Get.Clear();
-                  // this will return a type of number or key 
-                  // with the information from it like 1D1
-                  string inputValue = InputKey.KeyChar.ToString(); 
-                  Key = inputValue;
-                  return inputValue;
-            }
 
-            ///<summary>
-            /// this does the same thing than the Get.KeyInput()
-            /// but it only works with numbers
-            /// it will only read and hold the numbers pressed and it will 
-            /// return them  or  it will send a copy to the fallowing fields
-            /// Get.Number
-            /// Get.Key
-            /// </summary> 
-            ///<returns>int Key Number</returns>          
-            public static int KeyNumber()
-            {
-                  //    Get.LabelSide(">"); // just looks better damme it 
-                  //    Console.Write(" ");
-                  // it just did not make as much sence on 
-                  //why would i want something that is pointing to 
-                  // nothing because is just wating for a key to be pressed
-                  var InputKey = Console.ReadKey();
-                  Get.Clear();
-                  int inputValue = 0000;// this has to be disabled 
-
-                  if (InputKey.Key.ToString().Length > 1)
-                  {
-                        try
-                        {
-                              string inputVal = InputKey.Key.ToString();
-                              string lastDigit = inputVal[inputVal.Length - 1].ToString();
-                              inputValue = int.Parse(lastDigit);
-                        }
-                        catch
-                        {
-                                                          
-                              KeyNumber(); 
-                        }
-                  }
-                  else
-                  {
-                        Get.WrongInput(InputKey);
-                  }
-
-                  // this will return a type of number or key 
-                  // with the information from it like 1D1
-
-                  Key = inputValue.ToString(); // just in case                 
-                  Number = inputValue;          // if someone just rather to  use the key 
-                  return inputValue;
-            }
 
             /// <summary>
             /// Get the Input as an array the array.
@@ -599,7 +548,7 @@ namespace QuickTools
             {
 
 
-                  string[] input = Get.TextInput().Split(' ');
+                  string[] input = Get.Input().Text.Split(' ');
 
                   //Print.List(input);
 
@@ -672,7 +621,7 @@ namespace QuickTools
             {
 
 
-                  string[] inputValue = Get.TextInput(label.ToString()).Split(' ');
+                  string[] inputValue = Get.Input(label.ToString()).Text.Split(' ');
 
                  // Print.List(input);
 
@@ -713,22 +662,32 @@ namespace QuickTools
 
 
 
-              
-              /// <summary>
-              /// Input type.
-              /// </summary>
-             public class InputType
+
+            /// <summary>
+            /// Input type.
+            /// </summary>
+            public class InputType
             {
-                   /// <summary>
-                   /// Gets or sets the text.
-                   /// </summary>
-                   /// <value>The text.</value>
-                  public string Text { get; set;}
+                  /// <summary>
+                  /// Gets or sets the text.
+                  /// </summary>
+                  /// <value>The text.</value>
+                  public string Text { get; set; }
                   /// <summary>
                   /// Gets or sets the number.
                   /// </summary>
                   /// <value>The number.</value>
-                  public int Number { get; set; }                        
+                  public int Number { get; set; }
+
+                  /// <summary>
+                  /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:QuickTools.Get.InputType"/>.
+                  /// </summary>
+                  /// <returns>A <see cref="T:System.String"/> that represents the current <see cref="T:QuickTools.Get.InputType"/>.</returns>
+                  public override string ToString()
+                  {
+                        return this.Text;
+                  }
+
             }
 
 
@@ -785,7 +744,7 @@ namespace QuickTools
             /// <param name="display">Display.</param>
             public static InputType Input(string display)
             {
-                  Get.Write("");
+                 Console.Write("");
                   Get.LabelSide(display);
                   Get.Reset();                  
                   Console.Write(" ");
@@ -897,45 +856,7 @@ namespace QuickTools
 
             }
 
-            /// <summary>
-            /// TextInput Method ReadText from the Console and return text
-            /// has magenta color design and also it send the current text
-            /// to the Get.Text Field 
-            /// </summary>
-            /// <returns>The input.</returns>
-            public static string TextInput()
-            {
-                  /*              
-                  Get.LabelSide(">");
-                  Console.Write(" ");
-                                  
-                  string text = Console.ReadLine();
-                  //input = text; //i dont think it may be a good idea                  
-                  Text = text;
-                  */             
-                  string textInput = Get.Input().ToString();
-                  return textInput; 
-            }
-            /// <summary>
-            /// This Read text from the console and return it on an string format
-            /// it also has <see langword="async"/> label which is printed on top of it 
-            /// </summary>
-            /// <returns>The input.</returns>
-            /// <param name="textToDisplayOnTop">textToDisplayOnTop.</param>
-            public static string TextInput(string textToDisplayOnTop)
-            {
-                  //Get.LabelSide(textToDisplayOnTop);
-                  //Console.WriteLine("");
-                  Get.Reset();
-                  Console.Write(" ");
-                  Get.LabelSide(textToDisplayOnTop);
-                  Console.Write(" ");
-
-                  string text = Console.ReadLine();
-                  //input = text; //i dont think it may be a good idea                  
-                  Text = text;
-                  return text;
-            }
+ 
             /// <summary>
             /// Shortcut for Console.Reset(); 
             /// </summary>
@@ -943,13 +864,7 @@ namespace QuickTools
             {
                   Console.ResetColor();
             }
-            /// <summary>
-            ///shurtcut for Console.Clear(); 
-            /// </summary>
-            public static void Cle()
-            {
-                  Console.Clear();
-            }
+       
             /// <summary>
             /// shurtcut for Console.Clear(); 
             /// </summary>
@@ -969,7 +884,7 @@ namespace QuickTools
                   Console.BackgroundColor = ConsoleColor.Magenta;
                   Console.ForegroundColor = ConsoleColor.White;
                   Console.Write(" " + msg + " ");
-                  Get.W("");
+                 Console.Write("");
                   Get.Reset();
             }
             /// <summary>
@@ -1044,9 +959,9 @@ namespace QuickTools
                         underLine += simbol;
                   }
 
-                  Get.W(underLine);
-                  Get.W(simbol + " " + content + " " + simbol);
-                  Get.W(underLine);
+                 Console.WriteLine(underLine);
+                 Console.WriteLine(simbol + " " + content + " " + simbol);
+                 Console.WriteLine(underLine);
             }
                      /// <summary>
                      /// Box the specified content and simbol.
@@ -1062,16 +977,16 @@ namespace QuickTools
                         underLine += simbol;
                   }
 
-                  Get.W(underLine);
-                  Get.W(simbol + " " + content + " " + simbol);
-                  Get.W(underLine);
+                  Console.WriteLine(underLine);
+                  Console.Write(simbol + " " + content + " " + simbol);
+                  Console.WriteLine(underLine);
             }
-           
-           /// <summary>
-           /// Box the specified content and tabs.
-           /// </summary>
-           /// <param name="content">Content.</param>
-           /// <param name="tabs">Tabs.</param>
+
+            /// <summary>
+            /// Box the specified content and tabs.
+            /// </summary>
+            /// <param name="content">Content.</param>
+            /// <param name="tabs">Tabs.</param>
             public static void Box(object content, int tabs)
             {
                   string spaces = "\t";
@@ -1088,9 +1003,9 @@ namespace QuickTools
                         underLine += simbol;
                   }
 
-                  Get.W(tabSpaces + underLine);
-                  Get.W(tabSpaces + simbol + " " + content + " " + simbol);
-                  Get.W(tabSpaces + underLine);
+                 Console.WriteLine(tabSpaces + underLine);
+                 Console.Write(tabSpaces + simbol + " " + content + " " + simbol);
+                 Console.WriteLine(tabSpaces + underLine);
             }
 
             // custom box 
@@ -1120,9 +1035,9 @@ namespace QuickTools
                         underLine += simbol;
                   }
 
-                  Get.W(tabSpaces + underLine);
-                  Get.W(tabSpaces + simbol + " " + content + " " + simbol);
-                  Get.W(tabSpaces + underLine);
+                 Console.Write(tabSpaces + underLine);
+                 Console.Write(tabSpaces + simbol + " " + content + " " + simbol);
+                 Console.Write(tabSpaces + underLine);
             }
 
 
@@ -1139,7 +1054,7 @@ namespace QuickTools
                   Console.WriteLine("Something Went Really Wrong!!!");
                   Console.WriteLine("This" + ":=>>>> " + text);
                   Console.ResetColor();
-                  Get.Wait();
+              //   Console.Write();
             }
 
 
@@ -1152,7 +1067,7 @@ namespace QuickTools
                   Console.ForegroundColor = ConsoleColor.Red;
                   Console.WriteLine(" Wrong Input!!!, this is not a valid input: '{0}' ", msg);
                   Console.ResetColor();
-                  Get.Wait();
+               //  Console.Write();
             }
             /// <summary>
             /// Write Text with Console.WriteLine add red color and wait for a key to be pressed 
@@ -1163,10 +1078,37 @@ namespace QuickTools
                   Console.ForegroundColor = ConsoleColor.Red;
                   Console.WriteLine(" Wrong Input!!!, this is not a valid input: '{0}' ", msg);
                   Console.ResetColor();
-                  Get.Wait();
+               //  Console.Write();
             }
 
-     
+
+            /// <summary>
+            /// Gets an input without showing it on the screen
+            /// </summary>
+            /// <returns>The password.</returns>
+            public static string Password()
+            {
+                  string password = null;
+                                   
+                  while(true)
+                  {
+                       // Get.Clear();                       
+                        Console.SetCursorPosition(0,Console.CursorTop);
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.BackgroundColor = ConsoleColor.Black;                       
+                        var word = Console.ReadKey();
+                        password += word.KeyChar.ToString();
+
+                        if (word.Key.ToString() == "Enter")
+                        {
+
+                              break;
+                        }
+                  }
+
+                  Get.Reset();
+                  return password;                 
+            }
             /// <summary>
             /// Alert Not found write the file that was not founded and print it on color red
             /// </summary>
@@ -1176,7 +1118,7 @@ namespace QuickTools
                   Console.ForegroundColor = ConsoleColor.Red;
                   Console.WriteLine("This File Was Not Founded '{0}' ", msg);
                   Console.ResetColor();
-                  Get.Wait();
+            //     Console.Write();
             }
 
 
@@ -1186,7 +1128,7 @@ namespace QuickTools
             /// </summary>
             public static void Wait()
             {
-                  Get.W("Type any key to continue");
+                 Console.Write("Type any key to continue");
                   Console.ReadKey();
             }
 
@@ -1200,8 +1142,10 @@ namespace QuickTools
            /// <param name="Caller">Text Needed to be printed</param>
             public static void Wait(object Caller)
             {
-                  Get.W("Type any key to continue");
-                  Get.Yellow("This Called me =>  '" + Caller + "'");
+                  //Console.Write("Type any key to continue");
+                  //Get.Yellow("This Called me =>  '" + Caller + "'");
+                  Console.WriteLine("Info");
+                  Get.Yellow(Caller);                  
                   Console.ReadKey();
             }
 
@@ -1214,7 +1158,7 @@ namespace QuickTools
                   Console.ForegroundColor = ConsoleColor.Green;
                   Console.WriteLine("OK");
                   Console.ResetColor();
-                  Get.Wait();
+                 Console.Write("");
             }
             /// <summary>
             /// This is just used when you need to see if some logic is working as spected
@@ -1251,7 +1195,7 @@ namespace QuickTools
                               break;                             
                   }
 
-                  Get.Wait();
+              //   Console.Write();
             }
 
 
@@ -1270,7 +1214,7 @@ namespace QuickTools
                   Console.WriteLine(msg);
                   Console.ResetColor();
                   Console.Beep();
-                  Get.Wait();
+              //  Console.Write();
             }
             /// <summary>
             /// this is a very smallintent of  trying to hide the password
@@ -1304,42 +1248,25 @@ namespace QuickTools
                   /// <param name="text">Text.</param>
             public static void W(object text)
             {
-                  Console.WriteLine(text);
+                  Console.Write(text);
             }
+
             /// <summary>
-            /// Write the specified text.
+            /// Write to the console the given text
             /// </summary>
             /// <param name="text">Text.</param>
-            public static void Write(object text)
-            {
-                  Console.WriteLine(text);
-            }
-            /// <summary>
-            /// Write the specified text.
-            /// </summary>
-            /// <param name="text">Text.</param>
-            public static void C(object text)
+            public static void WL(object text)
             {
                   Console.WriteLine(text);
             }
 
-            // here are the methods to write with tabs 
-
             /// <summary>
-            /// Write the specified text and tabs.
+            /// Writes the line
             /// </summary>
             /// <param name="text">Text.</param>
-            /// <param name="tabs">Tabs.</param>
-            public static void W(object text, int tabs)
+            public static void WriteL(object text)
             {
-                  string spaces = "\t";
-                  string tabSpaces = "";
-                  for (int i = 0; i <= tabs; i++)
-                  {
-                        tabSpaces += spaces;
-                  }
-
-                  Console.WriteLine(tabSpaces + text);
+                  Console.WriteLine(text);
             }
             /// <summary>
             /// Write the specified text and tabs.
@@ -1358,27 +1285,16 @@ namespace QuickTools
                   Console.WriteLine(tabSpaces + text);
             }
 
-
-
-
-           
             /// <summary>
-            /// Write the specified text and tabs.
+            /// Write the specified value.
             /// </summary>
-            /// <param name="text">Text.</param>
-            /// <param name="tabs">Tabs.</param>
-                       
-            public static void C(object text, int tabs)
+            /// <param name="value">Value.</param>
+            public static void Write(object value)
             {
-                  string spaces = "\t";
-                  string tabSpaces = "";
-                  for (int i = 0; i <= tabs; i++)
-                  {
-                        tabSpaces += spaces;
-                  }
-
-                  Console.WriteLine(tabSpaces + text);
+                  Console.Write(value);                 
             }
+
+
 
             /*
      here im just going to add some shortcuts for the console colors
@@ -1389,14 +1305,14 @@ namespace QuickTools
     //////////// THIS AREA CONTROLS CONSOLE JUST DOCUMENT INFOMATION ////////////
     /////////////////////////////////////////////////////////////////////////////
     */
-       ///    public static string Version = "A032022";
-        ///    private static string lastModified = "03/23/2022";
-        /// 
+            ///    public static string Version = "A032022";
+            ///    private static string lastModified = "03/23/2022";
+            /// 
 
-                
-                /// <summary>
-                /// This Print QuickTools logo to the console , not really useful , but looks cool . 
-                /// </summary>
+
+            /// <summary>
+            /// This Print QuickTools logo to the console , not really useful , but looks cool . 
+            /// </summary>
             public static void About()
             {
 
@@ -1432,8 +1348,8 @@ Q:::::::QQ::::::::Q u:::::::::::::::uui::::::ic:::::::cccccc:::::ck::::::k k::::
 
                   //	Get.Label("QuickTools Version: " + version);
                   Color.Green("Created By MBV");
-               //   Get.W("Last Update: " + lastModified);
-                 // Get.Wait();
+               //  Console.Write("Last Update: " + lastModified);
+                 //Console.Write();
                  // LastChanges();
             }
 
@@ -1452,7 +1368,7 @@ Q:::::::QQ::::::::Q u:::::::::::::::uui::::::ic:::::::cccccc:::::ck::::::k k::::
                         Get.Yellow(number + ". " + changes[change]);
                   }
 
-                  Get.Wait();
+                 Console.Write();
 
             */
             }

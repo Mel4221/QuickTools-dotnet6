@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -24,56 +24,6 @@ namespace QuickTools
                 to do not override data so it will comfirm  it with the end user
             */
 
-
-            private static StringBuilder text = new StringBuilder(); 
-            /// <summary>
-            /// Converts to string a byte array 
-            /// </summary>
-            /// <returns>The to string.</returns>
-            /// <param name="array">Array.</param>
-            public static string ConvertToString(byte[] array)
-            {
-                  for(int value = 0; value < array.Length; value++)
-                  {
-                        text.Append(array[value] + ",");
-                  }
-
-                  return text.ToString(); 
-            }
-
-
-            /// <summary>
-            /// Converts to byte array.
-            /// </summary>
-            /// <returns>The to byte array.</returns>
-            /// <param name="rowString">Row string.</param>
-            public static byte[] ConvertToByteArray(string rowString)
-            {
-                  string current = "";
-                  List<string> temp = new List<string>();
-
-                  for(int value = 0; value < rowString.Length; value++)
-                  {
-                        if(rowString[value] != ',')
-                        {
-                              current += rowString[value]; 
-
-                        }if(rowString[value] == ',')
-                        {
-                              temp.Add(current);
-                              current = ""; 
-                        }
-                  }
-                  byte[] array = new byte[temp.Count]; 
-
-                  for(int back = 0; back < temp.Count; back++)
-                  {
-                        array[back] = Convert.ToByte(temp[back]);
-                  }
-
-                  return array; 
-
-            }
 
             /// <summary>
             /// Writes the content passed into a file
@@ -172,6 +122,27 @@ namespace QuickTools
                   }
                   Writer.Write(fileName, content.ToString());
             }
+
+
+
+            /// <summary>
+            /// Writs the given buffer to the file 
+            /// </summary>
+            /// <param name="file">File.</param>
+            /// <param name="buffer">Buffer.</param>
+            public static void IWrite(string file, byte[] buffer)
+            {
+                  if (File.Exists(file) == true)
+                  {
+                        File.Delete(file);
+                  }
+                  using (FileStream fs = new FileStream(file, FileMode.Create, FileAccess.Write))
+                  {
+                        fs.Write(buffer, 0, buffer.Length);
+                  }
+            }
+
+
 
             /// <summary>
             /// This method writes to a file an entired array of type byte
